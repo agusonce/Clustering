@@ -6,35 +6,43 @@ import java.util.Map;
 
 public class Grafo {
 	private Map<Integer,Map<Integer,Integer>> G;
-	private Integer vertice;
+	private Integer cantAristas = 0;
 	private Integer identificador; //vertice
-	public static int count = 0;
+	public static int count = 1;
 	
-	// La cantidad de vertices esta predeterminada desde el constructor
+	/* junto  a la variable Identificador son ideas sueltas que no tiene sentido en esta implementacion,
+	porfavor ignorla*/
+	
 	public Grafo()
 	{
-		identificador = count;
-		count++;
 		G = new HashMap<Integer,Map<Integer,Integer>>();
-		G.put(identificador, new HashMap<Integer, Integer>());
-		
 	}
-	private Grafo(Integer identificador)
+	public Grafo(Integer identificador)
 	{
 		this.identificador = identificador;
 		G = new HashMap<Integer,Map<Integer,Integer>>();
 		G.put(identificador, new HashMap<Integer, Integer>());
 	}
 	
+	public Map<Integer,Map<Integer,Integer>> getGrafo(){
+		return G;
+	}
 	// Agregado de aristas
-	public void agregarArista(int x, int i, Integer peso)
+	public void agregarArista(Integer x, Integer i, Integer peso)
 	{
 		//validacion
+		validarCiclo(x, i);
+		validarNegativos(x, i);
 		
+		if(G.get(i)==null) {
+			G.put(i, new HashMap<Integer, Integer>());
+		}
 		if(G.get(x) == null) {
-			G.put(x, new HashMap<Integer, Integer>(i , peso));
-		}else {
+			G.put(x, new HashMap<Integer, Integer>());
+		}
+		if(G.get(x).get(i) == null) {
 			G.get(x).put(i, peso);
+			cantAristas++;
 		}
 	}
 	
@@ -42,12 +50,23 @@ public class Grafo {
 	// Eliminacion de aristas
 	public void eliminarArista(int x, int i)
 	{
-		//if(grafo == this) {throw new IllegalArgumentException("no puede eliminarse a si mismo");}
+		if(x == i) {throw new IllegalArgumentException("no puede eliminarse a si mismo");}
 
-		if(G.get(x).get(i) != null)
+		if(G.get(x).get(i) != null){
 			G.get(x).remove(i);
+			cantAristas++;
+		}
+			
 	}
 
+	// Eliminacion de aristas
+	public void eliminarArista(Arista a)
+	{
+		if(a.obtenerVertice1() == a.obtenerVertice2()) {throw new IllegalArgumentException("no puede eliminarse a si mismo");}
+
+		if(G.get(a.obtenerVertice1()).get(a.obtenerVertice2()) != null)
+			G.get(a.obtenerVertice1()).remove(a.obtenerVertice2());
+	}
 	// Informa si existe la arista especificada
 	public boolean existeArista(int x, int i)
 	{
@@ -59,10 +78,23 @@ public class Grafo {
 			return false;
 	}
 
+	// Informa si existe la arista especificada
+	public int getPesoArista(int x, int i)
+	{
+		if (G.get(x) == null || (G.get(x).get(i)== null))
+			throw new IllegalArgumentException("no exite arista");
+			
+			return G.get(x).get(i);
+	}
 	// Cantidad de vertices
 	public int tamano()
 	{
 		return G.size();
+	}
+
+	public int cantAristas()
+	{
+		return this.cantAristas;
 	}
 	
 	// Vecinos de un vertice
@@ -70,90 +102,24 @@ public class Grafo {
 	{
 		return G.get(identificador);
 	}
-	
+	public Map<Integer,Integer> vecinos(Integer x)
+	{
+		return G.get(x);
+	}
 	public Integer getIdentificador() {
 		return identificador;
 	}
 
-	
-
-public class Arista implements Comparable<Arista>
-{
-	private int vertice1;
-	private int vertice2;
-	private int peso;
-	
-	public Arista(int vertice1, int vertice2, int peso)
-	{
-		if (vertice1!=vertice2)
-		{
-		this.vertice1 = vertice1;
-		this.vertice2 = vertice2;
-		this.peso = peso;
-		}
-		else
-		{
-			throw new IllegalArgumentException("No puede haber ciclos");
-		}
+	private void validarCiclo(int x, int i) {
+		if(x == i)
+			throw new IllegalArgumentException("no se permite loop: " + i);
 	}
 	
-
-	public int obtenerVertice1()
-	{
-		return this.vertice1;
+	private void validarNegativos(int x, int i) {
+		if(x < 0 || i < 0)
+			throw new IllegalArgumentException("El vertice no puede ser negativo: " + i);
 	}
-	
-	public int obtenerVertice2()
-	{
-		return this.vertice2;
-	}
-	
-	public int obtenerPeso()
-	{
-		return this.peso;
-	}
-	
-	
-	
-	@Override
-	public int compareTo(Arista o) {
 
-        int resultado=0;
 
-        if (this.peso>o.peso) 
-        {   
-        	resultado = -1;
-        }
-
-        else if (this.peso<o.peso) 
-        {
-        	resultado = 1;
-        }
-		return resultado;       
-	}
-	
-	@Override
-	public boolean equals (Object o) {
-
-        if (o instanceof Arista) {
-
-            Arista arista= (Arista) o;
-
-            if (arista.obtenerVertice1()==this.obtenerVertice1() &&
-            	arista.obtenerVertice2()==this.obtenerVertice2() && arista.obtenerPeso()==this.obtenerPeso()) 
-            	{
-            		return true;
-            	}
-           
-            
-        }
-        return false;
-	}
-	
-	public String toString()
-	{
-		return this.obtenerVertice1()+", "+this.obtenerVertice2()+", "+this.obtenerPeso();
-	}
-}
 
 }
