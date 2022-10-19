@@ -1,6 +1,6 @@
-package clustering;
+package clustering.backend;
 
-import clustering.Arista;
+import clustering.backend.Arista;
 
 public class Arista implements Comparable<Arista>
 {

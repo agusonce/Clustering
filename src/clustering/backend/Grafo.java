@@ -1,4 +1,4 @@
-package clustering;
+package clustering.backend;
 
 import java.util.HashMap;
 import java.util.Map;

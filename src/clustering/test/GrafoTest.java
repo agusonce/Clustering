@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import clustering.Grafo;
+import clustering.backend.Grafo;
 
 class GrafoTest {
 

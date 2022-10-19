@@ -1,4 +1,4 @@
-package clustering;
+package clustering.backend;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,11 +19,13 @@ public class GrafoAlgoritmos {
 			throw new IllegalArgumentException("paràmetro split negativo" );
 		if (!BFS.esConexo(g)) 
 			throw new IllegalArgumentException("el grafo no es conexo!" );
-		if(g.cantAristas() < split)
-			throw new IllegalArgumentException("el grafo no tiene la cantidad de aristas para continuar" );
+		
 
 		
 		Grafo agm = arbolGenerador(g);
+		if(agm.cantAristas() <= split)
+			throw new IllegalArgumentException("el grafo no tiene la cantidad de aristas para continuar" );
+		
 		for(int x = 1; x <= split; x++) {
 			Arista a = AGM.obtenerAristaPesada(agm);
 			System.out.println("se removera la arista:" + a.toString());

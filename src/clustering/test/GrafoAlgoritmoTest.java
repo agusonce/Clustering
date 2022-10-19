@@ -7,8 +7,8 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import clustering.Grafo;
-import clustering.GrafoAlgoritmos;
+import clustering.backend.Grafo;
+import clustering.backend.GrafoAlgoritmos;
 
 
 
