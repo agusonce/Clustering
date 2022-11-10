@@ -19,6 +19,7 @@ public class GScreen extends JFrame{
 	private GTable table;
 	private JButton btnNewButton;
 	private JButton btnGrafo;
+	private JButton btnGuardar;
 	private JLabel label;
 	private JTextField tfSplit;
 	private Grafo grafo;
@@ -37,16 +38,16 @@ public class GScreen extends JFrame{
 		/*
 		 * Tabla con los puntos
 		 */
-		table = new GTable();
+		table = new GTable(this);
 		this.grafo = grafoDefault();
 		table.setBackground(new Color(110, 110, 155));
+		table.getTableHeader().setBackground(new Color(100, 100, 100));
 		table.addColumn(new TableColumn());
-		table.setBounds(100, 30, 502, 330);
+		table.setBounds(145, 45, 502, 330);
 		this.getContentPane().add(table);
 		table.loadTable(grafo.getGrafo());;
-		/*
-		 * boton calcular
-		 */
+		
+		// boton calcular 
 		btnNewButton = new JButton("Calcular");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -55,6 +56,17 @@ public class GScreen extends JFrame{
 		});
 		
 		btnNewButton.setBounds(0, 60, 100, 30);
+		this.getContentPane().add(btnNewButton);
+		
+		// boton add column/grafo
+		btnNewButton = new JButton("add vecino");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				agregarVecinos();
+			}
+		});
+		
+		btnNewButton.setBounds(0,120, 100, 30);
 		this.getContentPane().add(btnNewButton);
 		
 		/*
@@ -97,6 +109,7 @@ public class GScreen extends JFrame{
 	
 	public void restaurar(){
 		this.grafo = grafoDefault();
+		//table.set
 		table.loadTable(grafo.getGrafo());
 	}
 	public Grafo grafoDefault() {
@@ -113,6 +126,12 @@ public class GScreen extends JFrame{
 		g.agregarArista(7,9,6);
 		g.agregarArista(5,9,4);
 		return g;
+	}
+	
+	public void agregarVecinos(){
+		int x = table.getDimencion();
+		table.setDimencion(x + 1);
+		table.loadTable();
 	}
 	private void validarNumero(String split){
 		if (split == null || "".equals(split)) {
